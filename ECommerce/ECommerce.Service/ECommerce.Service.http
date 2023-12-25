@@ -1,0 +1,5 @@
+﻿@ECommerce.Service_HostAddress = https://localhost:44327
+
+GET {{ECommerce.Service_HostAddress}}/api/version
+
+###
