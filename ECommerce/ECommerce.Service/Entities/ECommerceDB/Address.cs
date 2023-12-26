@@ -16,6 +16,7 @@ namespace ECommerce.Service.Entities.ECommerceDB
         public string City { get; set; } = null!;
         public string District { get; set; } = null!;
         public string Description { get; set; } = null!;
+        public bool Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 

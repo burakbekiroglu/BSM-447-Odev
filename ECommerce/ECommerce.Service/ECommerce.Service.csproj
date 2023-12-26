@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="UploadFiles\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
