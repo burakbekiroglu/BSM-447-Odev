@@ -1,6 +1,7 @@
 ﻿using ECommerce.Service.Dtos;
 using ECommerce.Service.Entities.ECommerceDB;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace ECommerce.Service.Services
 {
@@ -17,6 +18,7 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> DeleteProductByIdAsync(int id);
         Task<GeneralDto.Response> SaveProductImagesAsync(ProductDto.SaveProductImageRequest model);
         Task<GeneralDto.Response> DeleteProductImageByIdAsync(int id);
+        Task<GeneralDto.Response> UpdateStockAsync(int productId, int quantity);
     }
     public class ProductService : IProductService
     {
@@ -316,6 +318,18 @@ namespace ECommerce.Service.Services
                 Error = false,
                 Message = "Product added to wish list"
             };
+        }
+
+        public async Task<GeneralDto.Response> UpdateStockAsync(int productId, int quantity)
+        {
+            var product = await _context.Product.FirstOrDefaultAsync(f => f.Id == productId);
+            if (product is null) throw new Exception("Invalid product");
+
+            product.Stock = product.Stock + quantity;
+            _context.Product.Update(product);
+            await _context.SaveChangesAsync();
+
+            return new GeneralDto.Response { Error = false };
         }
     }
 }

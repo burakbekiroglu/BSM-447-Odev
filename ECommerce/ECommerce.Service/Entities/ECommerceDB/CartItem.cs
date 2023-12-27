@@ -8,6 +8,7 @@ namespace ECommerce.Service.Entities.ECommerceDB
         public int Id { get; set; }
         public int CartId { get; set; }
         public int ProductId { get; set; }
+        public double Amount { get; set; }
         public int Quantity { get; set; }
         public DateTime CreatedDate { get; set; }
 

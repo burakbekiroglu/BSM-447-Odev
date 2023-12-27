@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext -Connection "Server=(localdb)\mssqllocaldb;Database=ECommerce" -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir "Entities/ECommerceDB" -Context "ECommerceDBContext" –Force -NoPluralize
