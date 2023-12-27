@@ -222,6 +222,7 @@ namespace ECommerce.Service.Services
                 product = new Product();
                 product.CategoryId = model.CategoryId;
                 product.Name = model.Name;
+                product.Description=model.Description;
                 product.Amount = model.Amount;
                 product.Status = model.Status;
                 product.Stock = model.Stock;
@@ -239,6 +240,7 @@ namespace ECommerce.Service.Services
 
                 product.CategoryId = model.CategoryId;
                 product.Name = model.Name;
+                product.Description = model.Description;
                 product.Amount = model.Amount;
                 product.Status = model.Status;
                 product.Stock = model.Stock;
