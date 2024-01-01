@@ -1,4 +1,5 @@
 ﻿using ECommerce.Service.Dtos;
+using ECommerce.Service.Middlewares;
 using ECommerce.Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ namespace ECommerce.Service.Controllers
         }
 
         [HttpPost("Register")]
+        [Transaction ]
         public async Task<IActionResult> Register(UserDto.SaveRequest model)
         {
             var result = await _userService.SaveAsync(model);

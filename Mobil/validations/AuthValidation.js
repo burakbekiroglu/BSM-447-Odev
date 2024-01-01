@@ -7,3 +7,11 @@ export const registerSchema = yup.object().shape({
     phone:yup.string().required('Bu alan zorunludur!'),
     password:yup.string().required('Bu alan zorunludur!')
   });
+
+  export const productSchema=yup.object().shape({
+    categoryId:yup.number().min(1,"Kategori seçiniz!").required('Bu alan zorunludur!'),
+        name:yup.string().required('Bu alan zorunludur!'),
+        description:yup.string().required('Bu alan zorunludur!'),
+        amount:yup.string().required('Bu alan zorunludur!'),
+        stock:yup.string().required('Bu alan zorunludur!'),
+  });

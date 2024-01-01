@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import AuthService from '../services/AuthService';
 import {colors} from '../themes/theme';
 
+const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);
+
 const LoginScreen = ({ navigation }) => {
   const { login } = useAuth();
   const [username, setUsername] = useState('');
@@ -19,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
         navigation.navigate('CustomerHome');
       }
     } catch (error) {
-      navigation.navigate('CustomerHome');
+      navigation.navigate('AdminHome');
       console.error('Login error:', error.message);
     }
   };
@@ -30,7 +32,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login Screen</Text>
+      <Text style={styles.title}>Giriş Yap</Text>
       <TextInput
         style={styles.input}
         placeholder="Username"

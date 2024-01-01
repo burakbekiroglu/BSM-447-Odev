@@ -42,5 +42,16 @@
             public bool Status { get; set; } = true;
         }
 
+        public class AdminDetail
+        {
+            public int Id { get; set; } = 0;
+            public int CategoryId { get; set; }
+            public string Category { get; set; }
+            public string Name { get; set; }
+            public bool Status { get; set; } = true;
+            public int Stock { get; set; }
+            public string? Image { get; set; }
+        }
+
     }
 }

@@ -19,6 +19,8 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> SaveProductImagesAsync(ProductDto.SaveProductImageRequest model);
         Task<GeneralDto.Response> DeleteProductImageByIdAsync(int id);
         Task<GeneralDto.Response> UpdateStockAsync(int productId, int quantity);
+        Task<GeneralDto.Response> GetProductByIdAsync(int id);
+        Task<GeneralDto.Response> GetProductsForAdminAsync();
     }
     public class ProductService : IProductService
     {
@@ -140,6 +142,54 @@ namespace ECommerce.Service.Services
             {
                 Error = false,
                 Data = result
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetProductByIdAsync(int id)
+        {
+            var product = await _context.Product.Where(w => w.Id == id).Select(s => new ProductDto.SaveProductRequest
+            {
+                Id = s.Id,
+                Name = s.Name,
+                CategoryId = s.CategoryId,
+                Description = s.Description,
+                Amount=s.Amount,
+                Status = s.Status,
+                Stock=s.Stock
+            }).FirstOrDefaultAsync();
+
+            if (product is null) return new GeneralDto.Response { Error = true };
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = product
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetProductsForAdminAsync()
+        {
+            var products = await _context.Product
+                .AsSplitQuery()
+                .Include(i => i.ProductImage)
+                .Include(i => i.Category)
+                .Select(s => new ProductDto.AdminDetail
+                {
+                    Id = s.Id,
+                    CategoryId= s.CategoryId,
+                    Category = s.Category.Category,
+                    Name=s.Name,
+                    Status=s.Status,
+                    Stock = s.Stock,
+                    Image=s.ProductImage.FirstOrDefault()==null?null: s.ProductImage.FirstOrDefault().FileName
+
+
+                }).ToListAsync();
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = products
             };
         }
 

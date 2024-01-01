@@ -5,6 +5,8 @@ import AdminHomeScreen from '../screens/AdminHomeScreen';
 import CustomerHomeScreen from '../screens/CustomerHomeScreen';
 import RegisterScreen from '../screens/RegisterScreen'; 
 import { useAuth } from '../contexts/AuthContext';
+import SaveProductScreen from '../screens/SaveProductScreen';
+
 
 const Stack = createStackNavigator();
 
@@ -27,8 +29,21 @@ const AppNavigator = () => {
           headerLeft: null,
         }}
       />
-      <Stack.Screen name="AdminHome" component={AdminHomeScreen} />
-      <Stack.Screen name="CustomerHome" component={CustomerHomeScreen} />
+      <Stack.Screen 
+      name="AdminHome" 
+      options={{
+        headerLeft: null,
+      }}
+      component={AdminHomeScreen} />
+      <Stack.Screen 
+      name="SaveProduct" 
+      component={SaveProductScreen} />
+      <Stack.Screen 
+      name="CustomerHome" 
+      options={{
+        headerLeft: null,
+      }}
+      component={CustomerHomeScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
   );
