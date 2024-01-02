@@ -33,7 +33,6 @@ namespace ECommerce.Service.Controllers
         }
 
         [HttpPost("GetProductById")]
-        [Transaction]
         public async Task<IActionResult> GetProductById(GeneralDto.IdRequest model)
         {
             var result = await _productService.GetProductByIdAsync(model.Id);
@@ -46,5 +45,29 @@ namespace ECommerce.Service.Controllers
             var result = await _productService.GetProductsForAdminAsync();
             return Ok(result);
         }
+
+        [HttpPost("SaveCategory")]
+        [Transaction]
+        public async Task<IActionResult> SaveCategory(ProductDto.SaveCategoryRequest model)
+        {
+            var result = await _productService.SaveCategoryAsync(model);
+            return Ok(result);
+        }
+
+        [HttpGet("GetCategories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var result = await _productService.GetCategoriesAsync();
+            return Ok(result);
+        }
+
+        [HttpPost("GetCategoryById")]
+        public async Task<IActionResult> GetCategoryById(GeneralDto.IdRequest model)
+        {
+            var result = await _productService.GetCategoryByIdAsync(model.Id);
+            return Ok(result);
+        }
+
+
     }
 }

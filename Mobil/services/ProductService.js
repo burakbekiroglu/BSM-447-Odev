@@ -2,7 +2,7 @@ import Constants from '../constants/Constants';
 
 
 const ProductService = {
-    SaveProduct: async (data) => {
+  SaveProduct: async (data) => {
     try {
       const response = await fetch(`${Constants.ServiceUrl}/Product/SaveProduct`, {
         method: 'POST',
@@ -65,6 +65,62 @@ const ProductService = {
         headers: {
           'Content-Type': 'application/json',
         },
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
+  SaveCategory: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/SaveCategory`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
+  GetCategories: async () => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/GetCategories`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
+  GetCategoryById: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/GetCategoryById`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {

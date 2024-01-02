@@ -66,7 +66,8 @@ const Products = ({ navigation }) => {
       <Image source={{uri: item.image??'https://as2.ftcdn.net/v2/jpg/03/15/18/09/1000_F_315180932_rhiXFrJN27zXCCdrgx8V5GWbLd9zTHHA.jpg'}} style={styles.productImage} />
       <View style={styles.productInfo}>
         <Text style={styles.productTitle}>{item.name}</Text>
-        <Text style={styles.productStock}>Stok: {item.stock}</Text>
+        <Text style={styles.productPropertyInfo}>Kategori: {item.category}</Text>
+        <Text style={styles.productPropertyInfo}>Stok: {item.stock}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -112,9 +113,11 @@ const styles = StyleSheet.create({
   container: {
      flex: 1,
      paddingTop: 20,
+     backgroundColor:'#fafafa'
   },
   list: {
      paddingHorizontal: 15,
+     flexGrow:'initial',
   },
   categoryItem: {
      backgroundColor: '#f9c2ff',
@@ -122,17 +125,25 @@ const styles = StyleSheet.create({
      marginRight: 10,
      borderRadius: 5,
      justifyContent:'center',
+     height:24,
+     padding:2
   },
   title: {
      fontSize: 18,
   },
   productList: {
+    marginVertical:10,
      paddingHorizontal: 20,
-     paddingTop:10
   },
   productItem: {
+    margin:3,
      flexDirection: 'row',
+     justifyContent:'space-around',
      padding: 10,
+     borderRadius:10,
+     borderColor:'gray',
+     borderStyle:'solid',
+     borderWidth:1
   },
   productImage: {
      width: 100,
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
   productTitle: {
      fontSize: 16,
   },
-  productStock: {
+  productPropertyInfo: {
      fontSize: 14,
      color: 'gray',
   },

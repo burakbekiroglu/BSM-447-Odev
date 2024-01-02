@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons'; 
 import {  Text } from 'react-native';
 import Products from '../components/Admin/Products';
+import Categories from '../components/Admin/Categories';
 
 const Tab = createBottomTabNavigator();
 const AdminHomeScreen = () => {
@@ -26,9 +27,10 @@ const AdminHomeScreen = () => {
       }}
     />
     <Tab.Screen
-      name="Profile"
-      component={()=>(<Text>das</Text>)}
+      name="Categories"
+      component={Categories}
       options={{
+        headerShown:false,
         tabBarLabel: 'Kategoriler',
         tabBarIcon: ({ color, size }) => <FontAwesome name="list" color={color} size={size} />,
       }}

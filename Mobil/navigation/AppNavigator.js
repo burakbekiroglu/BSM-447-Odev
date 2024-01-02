@@ -5,6 +5,7 @@ import AdminHomeScreen from '../screens/AdminHomeScreen';
 import CustomerHomeScreen from '../screens/CustomerHomeScreen';
 import RegisterScreen from '../screens/RegisterScreen'; 
 import { useAuth } from '../contexts/AuthContext';
+import SaveCategoryScreen from '../screens/SaveCategoryScreen';
 import SaveProductScreen from '../screens/SaveProductScreen';
 
 
@@ -38,6 +39,9 @@ const AppNavigator = () => {
       <Stack.Screen 
       name="SaveProduct" 
       component={SaveProductScreen} />
+      <Stack.Screen 
+      name="SaveCategory" 
+      component={SaveCategoryScreen} />
       <Stack.Screen 
       name="CustomerHome" 
       options={{

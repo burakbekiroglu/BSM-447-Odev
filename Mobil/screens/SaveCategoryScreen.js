@@ -1,36 +1,27 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,Picker ,Switch,ActivityIndicator } from 'react-native';
 import ProductService from '../services/ProductService';
-import { productSchema } from '../validations/AuthValidation';
+import { categorySchema } from '../validations/AuthValidation';
 
 const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);
 
 const SaveProductScreen=({route})=>{
     const [isLoading,setIsLoading]=useState(false);
-    const[categories,setCategories]=useState([{label:"Kategori Seçiniz", value:0}]);
     const { id } = route.params;
     const [data,setData]=useState({
         id:id,
-        categoryId:null,
-        name:'',
-        description:'',
-        amount:'',
+        category:'',
         status:true,
-        stock:''
     });
 
     const [errors, setErrors] = useState({
-        categoryId:'',
-        name:'',
-        description:'',
-        amount:'',
-        status:true,
-        stock:''
+        id:id,
+        category:'',
       });
 
-    const getProduct= async (productId)=>{
+    const getCategory= async (categoryId)=>{
         setIsLoading(true);
-        const res= await ProductService.GetProductById({id:productId});
+        const res= await ProductService.GetCategoryById({id:categoryId});
         setIsLoading(false);
         if(res&& !res.error){
             setData(res.data);
@@ -39,12 +30,12 @@ const SaveProductScreen=({route})=>{
 
     const handleSave= async()=>{
         try {
-            await productSchema.validate(data, { abortEarly: false });
+            await categorySchema.validate(data, { abortEarly: false });
       
             setIsLoading(true);
-            const response = await ProductService.SaveProduct(data);
+            const response = await ProductService.SaveCategory(data);
             setIsLoading(false);
-            await getProduct(response.data.id);
+            await getCategory(response.data.id);
             
           } catch (error) {
             setIsLoading(false);
@@ -58,19 +49,12 @@ const SaveProductScreen=({route})=>{
           }
     };
 
-    const getCategories= async ()=>{
-        const response = await ProductService.CategorySelectOptions();
-        if(response && !response.error){
-            setCategories([...categories,...response.data]);
-        }
-    }
 
 
     useLayoutEffect(()=>{
         (async()=>{
-            await getCategories();
             if(id>0){
-                await getProduct(id);
+                await getCategory(id);
             }
         })();
         
@@ -85,50 +69,17 @@ const SaveProductScreen=({route})=>{
 
     return (
         <View style={styles.container}>
-          <Text style={styles.title}>Ürün İşlemleri</Text> 
+          <Text style={styles.title}>Kategori İşlemleri</Text> 
         
         {isLoading?( <ActivityIndicator size="large" color="#0000ff" style={{flexDirection:"row" }} />):(<> 
-          <Text style={{ fontSize: 24, marginBottom: 16 }}>Ürün İsmi</Text>
+            <Text style={{ fontSize: 24, marginBottom: 16 }}>Kategori</Text>
         <TextInput
           style={styles.input}
-          placeholder="İsim"
-          value={data.name}
-          onChangeText={(text) => onChange('name',text)}
+          placeholder="Kategori Giriniz..."
+          value={data.category}
+          onChangeText={(text) => onChange('category',text)}
         />
         <ErrorMessage value={errors.name}/>
-        <Text style={{ fontSize: 24, marginBottom: 16 }}>Kategori</Text>
-        <Picker
-        selectedValue={data.categoryId}
-        style={styles.picker}
-        onValueChange={(itemValue, itemIndex) => onChange("categoryId",itemValue)}
-      >
-        {categories.map(m=> (<Picker.Item key={m.id}  label={m.label} value={m.value}/>))}
-      </Picker>
-      <ErrorMessage value={errors.categoryId}/>
-      <Text style={{ fontSize: 24, marginBottom: 16 }}>Açıklama</Text>
-      <TextInput
-          style={styles.input}
-          placeholder="Açıklama"
-          value={data.description}
-          onChangeText={(text) => onChange('description',text)}
-        />
-        <ErrorMessage value={errors.description}/>
-        <Text style={{ fontSize: 24, marginBottom: 16 }}>Fiyat</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Tutar"
-          value={data.amount}
-          onChangeText={(text) => onChange('amount',text)}
-        />
-        <ErrorMessage value={errors.amount}/>
-        <Text style={{ fontSize: 24, marginBottom: 16 }}>Stok</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Stok"
-          value={data.stock}
-          onChangeText={(text) => onChange('stock',text)}
-        />
-        <ErrorMessage value={errors.stock}/>
 <Text style={{ fontSize: 24, marginBottom: 16 }}>Durum</Text>
 <Switch
         trackColor={{ false: '#767577', true: '#81b0ff' }}
@@ -174,7 +125,6 @@ const styles = StyleSheet.create({
         width: '100%',
       },
     buttonContainer: {
-      marginTop:10,
       flexDirection: 'row', 
       justifyContent: 'space-between', 
       width: '100%', 
@@ -185,12 +135,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
       },
       saveButton: {
-        marginTop:5,
+        marginTop:2,
         backgroundColor: "#3498db",
         borderRadius: 12,
         paddingVertical: 12,
         paddingHorizontal: 24,
-        marginBottom: 14,
+        marginBottom: 16,
       },
       errorText: {
         color: 'red',

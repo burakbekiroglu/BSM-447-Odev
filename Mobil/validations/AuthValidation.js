@@ -15,3 +15,7 @@ export const registerSchema = yup.object().shape({
         amount:yup.string().required('Bu alan zorunludur!'),
         stock:yup.string().required('Bu alan zorunludur!'),
   });
+
+  export const categorySchema=yup.object().shape({
+        category:yup.string().required('Bu alan zorunludur!'),
+  });

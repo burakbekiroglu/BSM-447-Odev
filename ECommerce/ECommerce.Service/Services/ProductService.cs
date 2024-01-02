@@ -21,6 +21,9 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> UpdateStockAsync(int productId, int quantity);
         Task<GeneralDto.Response> GetProductByIdAsync(int id);
         Task<GeneralDto.Response> GetProductsForAdminAsync();
+        Task<GeneralDto.Response> GetCategoriesAsync();
+        Task<GeneralDto.Response> GetCategoryByIdAsync(int id);
+
     }
     public class ProductService : IProductService
     {
@@ -130,9 +133,43 @@ namespace ECommerce.Service.Services
             };
         }
 
+        public async Task<GeneralDto.Response> GetCategoriesAsync()
+        {
+            var categories = await _context.ProductCategory.Select(s => new ProductDto.SaveCategoryRequest
+            {
+                Id = s.Id,
+                Category = s.Category,
+                Status = s.Status,
+            }).ToListAsync();
+
+            return new GeneralDto.Response { Error = false, Data = categories };
+        }
+
+        public async Task<GeneralDto.Response> GetCategoryByIdAsync(int id)
+        {
+            var category = await _context.ProductCategory.Where(w => w.Id == id).Select(s => new ProductDto.SaveCategoryRequest
+            {
+                Id = s.Id,
+                Category = s.Category,
+                Status = s.Status
+            }).FirstOrDefaultAsync();
+
+            if (category is null) return new GeneralDto.Response
+            {
+                Error = true,
+                Message = "Category could not found"
+            };
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = category
+            };
+        }
+
         public async Task<GeneralDto.Response> GetCategorySelectOptions()
         {
-            var result = await _context.ProductCategory.Where(w => w.Status).Select(s => new GeneralDto.Select
+            var result = await _context.ProductCategory.Select(s => new GeneralDto.Select
             {
                 Label = s.Category,
                 Value = s.Id
@@ -214,6 +251,7 @@ namespace ECommerce.Service.Services
                 };
 
                 existCategory.Category = model.Category;
+                existCategory.Status = model.Status;
                 existCategory.UpdatedDate = DateTime.Now;
                 _context.ProductCategory.Update(existCategory);
             }
