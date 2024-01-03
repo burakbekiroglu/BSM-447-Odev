@@ -24,6 +24,7 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> GetCategoriesAsync();
         Task<GeneralDto.Response> GetCategoryByIdAsync(int id);
         Task<GeneralDto.Response> GetProductsAsync();
+        Task<GeneralDto.Response> GetProductForCustomerAsync(int id);
 
     }
     public class ProductService : IProductService
@@ -174,9 +175,9 @@ namespace ECommerce.Service.Services
             {
                 Label = s.Category,
                 Value = s.Id,
-                Common =new
+                Common = new
                 {
-                    Status=s.Status,
+                    Status = s.Status,
                 }
             }).ToListAsync();
 
@@ -209,22 +210,47 @@ namespace ECommerce.Service.Services
             };
         }
 
+        public async Task<GeneralDto.Response> GetProductForCustomerAsync(int id)
+        {
+            var product = await _context.Product
+                .Include(i => i.Category)
+                .Include(i => i.ProductImage)
+                .Where(w => w.Status && w.Category.Status && w.Id == id)
+                .Select(s => new ProductDto.CustomerDetail
+                {
+                    Id = s.Id,
+                    Category = s.Category.Category,
+                    CategoryId = s.CategoryId,
+                    Description = s.Description,
+                    Name = s.Name,
+                    Stock = s.Stock,
+                    Amount = s.Amount,
+                    Images = s.ProductImage.OrderBy(o => o.Sort).Select(s => s.FileName).ToList()
+                }).FirstOrDefaultAsync();
+
+            return new GeneralDto.Response
+            {
+                Error = product == null ? true : false,
+                Data = product
+            };
+        }
+
         public async Task<GeneralDto.Response> GetProductsAsync()
         {
             var products = await _context.Product
                 .Include(i => i.Category)
                 .Include(i => i.ProductImage)
-                .Where(w=>w.Status && w.Category.Status)
+                .Where(w => w.Status && w.Category.Status)
                 .Select(s => new ProductDto.CustomerDetail
                 {
-                    Id=s.Id,
-                    Category=s.Category.Category,
-                    CategoryId=s.CategoryId,
-                    Description=s.Description,
-                    Name=s.Name,
-                    Stock=s.Stock,
-                    Amount=s.Amount,
-                    Images=s.ProductImage.OrderBy(o=>o.Sort).Select(s=>s.FileName).ToList()
+                    Id = s.Id,
+                    Category = s.Category.Category,
+                    CategoryId = s.CategoryId,
+                    Description = s.Description,
+                    Name = s.Name,
+                    Stock = s.Stock,
+                    Amount = s.Amount,
+                    Images = s.ProductImage.OrderBy(o => o.Sort).Select(s => s.FileName).ToList()
                 }).ToListAsync();
 
             return new GeneralDto.Response

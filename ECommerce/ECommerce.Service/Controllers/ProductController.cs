@@ -1,11 +1,13 @@
 ﻿using ECommerce.Service.Dtos;
 using ECommerce.Service.Middlewares;
 using ECommerce.Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Service.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -75,6 +77,12 @@ namespace ECommerce.Service.Controllers
             return Ok(result);
         }
 
+        [HttpPost("GetProductForCustomer")]
+        public async Task<IActionResult> GetProductForCustomer(GeneralDto.IdRequest model)
+        {
+            var result = await _productService.GetProductForCustomerAsync(model.Id);
+            return Ok(result);
+        }
 
     }
 }
