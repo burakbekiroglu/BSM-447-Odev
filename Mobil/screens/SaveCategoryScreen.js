@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,Picker ,Switch,ActivityIndicator } from 'react-native';
 import ProductService from '../services/ProductService';
-import { categorySchema } from '../validations/AuthValidation';
+import { categorySchema } from '../validations/Validation';
 
 const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);
 

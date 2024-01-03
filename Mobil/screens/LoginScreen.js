@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet,ActivityIndicator }
 import { useAuth } from '../contexts/AuthContext';
 import AuthService from '../services/AuthService';
 import {colors} from '../themes/theme';
-import { loginSchema } from '../validations/AuthValidation';
+import { loginSchema } from '../validations/Validation';
 import Constants from '../constants/Constants';
 
 const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);

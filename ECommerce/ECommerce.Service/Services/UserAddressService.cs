@@ -10,6 +10,7 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> SaveAsync(UserAddressDto.SaveRequest model);
         Task<GeneralDto.Response> DeleteAsync(int id);
         Task<GeneralDto.Response> GetUserAddresesAsync(int userId);
+        Task<GeneralDto.Response> GetAddressByIdAsync(int id);
     }
     public class UserAddressService : IUserAddressService
     {
@@ -36,6 +37,28 @@ namespace ECommerce.Service.Services
             {
                 Error = false,
                 Message="Address deleted successfully"
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetAddressByIdAsync(int id)
+        {
+            var address = await _context.Address
+                .AsNoTracking()
+                .Where(w => w.Id==id && w.Status)
+                .Select(s => new UserAddressDto.Detail
+                {
+                    Id = s.Id,
+                    Country = s.Country,
+                    City = s.City,
+                    District = s.District,
+                    Description = s.Description,
+                })
+                .FirstOrDefaultAsync();
+
+            return new GeneralDto.Response
+            {
+                Error = address==null?true: false,
+                Data = address
             };
         }
 
@@ -69,10 +92,10 @@ namespace ECommerce.Service.Services
                 Error = true,
                 Message = "Invalid customer!"
             };
-
+            Address address;
             if (model.Id == 0)
             {
-                var address = new Address();
+                address = new Address();
                 address.UserId = model.UserId;
                 address.Country = model.Country;
                 address.City = model.City;
@@ -84,23 +107,24 @@ namespace ECommerce.Service.Services
             }
             else
             {
-                var existAddress = await _context.Address.FirstOrDefaultAsync(f => f.Id == model.Id);
-                if (existAddress is null) return new GeneralDto.Response
+                 address = await _context.Address.FirstOrDefaultAsync(f => f.Id == model.Id);
+                if (address is null) return new GeneralDto.Response
                 {
                     Error = true,
                     Message = "Address could not found"
                 };
-                existAddress.Country = model.Country;
-                existAddress.City = model.City;
-                existAddress.District = model.District;
-                existAddress.Description = model.Description;
-                existAddress.UpdatedDate = DateTime.Now;
-                _context.Address.Update(existAddress);
+                address.Country = model.Country;
+                address.City = model.City;
+                address.District = model.District;
+                address.Description = model.Description;
+                address.UpdatedDate = DateTime.Now;
+                _context.Address.Update(address);
             }
             await _context.SaveChangesAsync();
             return new GeneralDto.Response
             {
                 Error = false,
+                Data=address,
                 Message = "Address saved successfully"
             };
         }

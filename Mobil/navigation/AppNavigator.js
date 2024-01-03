@@ -10,6 +10,8 @@ import SaveProductScreen from '../screens/SaveProductScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import Constants from '../constants/Constants';
 import PersonalInfoScreen from '../screens/PersonalInfoScreen';
+import AddressScreen from '../screens/AddressScreen';
+import AddressDetailScreen from '../screens/AddressDetailScreen';
 
 
 const Stack = createStackNavigator();
@@ -50,6 +52,12 @@ const AppNavigator = () => {
       <Stack.Screen 
       name="PersonalInfo" 
       component={PersonalInfoScreen} />
+      <Stack.Screen 
+      name="Addresses" 
+      component={AddressScreen} />
+      <Stack.Screen 
+      name="AddressDetail" 
+      component={AddressDetailScreen} />
       <Stack.Screen 
       name="CustomerHome" 
       options={{

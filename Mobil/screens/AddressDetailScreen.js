@@ -1,28 +1,27 @@
-import React, { useState,useCallback } from 'react';
-import { View, Text, TextInput, Button, StyleSheet,TouchableOpacity,ActivityIndicator } from 'react-native';
-import { registerSchema } from '../validations/Validation';
+import React, { useState,useCallback, useLayoutEffect } from 'react';
+import { View, Text, TextInput, StyleSheet,TouchableOpacity,ActivityIndicator } from 'react-native';
 import {colors} from '../themes/theme'
-import AuthService from '../services/AuthService';
-import { useAuth } from '../contexts/AuthContext';
-import { useFocusEffect } from '@react-navigation/native';
+import AddressService from '../services/AddressService';
+import { addressSchema } from '../validations/Validation';
+
+
 
 const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);
 
-const PersonalInfoScreen = () => {
-    const {user}=useAuth();
+const AddressDetailScreen = ({route}) => {
+    const { id } = route.params;
   const[data,setData]=useState({
-    firstName:'',
-    lastName: '',
-    email:'',
-    phone:'',
-    password:''
+    id:id,
+    country:'',
+    city: '',
+    district:'',
+    description:'',
   });
   const [errors, setErrors] = useState({
-    firstName:'',
-    lastName: '',
-    email:'',
-    phone:'',
-    password:''
+    country:'',
+    city: '',
+    district:'',
+    description:'',
   });
   const [isLoading,setIsLoading]=useState(false);
 
@@ -33,13 +32,14 @@ const PersonalInfoScreen = () => {
 
   const handleSave = async () => {
     try {
-      await registerSchema.validate(data, { abortEarly: false });
+      await addressSchema.validate(data, { abortEarly: false });
 
       setIsLoading(true);
-      const response = await AuthService.Save({...user,...data});
+      const response = await AddressService.Save(data);
       setIsLoading(false);
       if(response  && !response.error){
-        alert('Kişisel bilgiler kaydedildi.');
+        alert('Adres kaydedildi.');
+        await getAddress(response.data.id)
       }else{
         alert('Bir hata oluştu Tekrar deneyiniz...');
       }
@@ -55,77 +55,67 @@ const PersonalInfoScreen = () => {
     }
   };
 
-  const getUserInfo=async()=>{
+  const getAddress=async(addressId)=>{
     setIsLoading(true);
-    const response= await AuthService.GetUser({id:user.id});
+    const response= await AddressService.GetAddressById({id:addressId});
     setIsLoading(false);
     if(response && !response.error){
-        const esixtUser=response.data;
+        const address=response.data;
         setData({
-            firstName:esixtUser.firstName,
-            lastName: esixtUser.lastName,
-            email:esixtUser.email,
-            phone:esixtUser.phone,
-            password:esixtUser.password,
+            id:address.id,
+            country:address.country,
+            city: address.city,
+            district:address.district,
+            description:address.description,
         })
     }else{
         alert('Bir hata oluştu Tekrar deneyiniz...');
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      (async()=>{
-        await getUserInfo();
-      })();
-      return () => {
-       
-      };
-    }, []));
-
-  
+  useLayoutEffect(()=>{
+    (async()=>{
+        if(id>0) await getAddress(id);
+       })();
+  },[id])
 
   return (
     <View style={styles.container}>
       {
         isLoading?( <ActivityIndicator size="large" color="#0000ff" style={{flexDirection:"row" }} />):
-        (<><Text style={styles.title}>Kişisel Bilgiler</Text>
+        (<><Text style={styles.title}>Adres Detay</Text>
+        <Text style={{ fontSize: 24, marginBottom: 16 }}>Ülke</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ad"
-          value={data.firstName}
-          onChangeText={(text) => onChange('firstName',text)}
+          placeholder="Ülke"
+          value={data.country}
+          onChangeText={(text) => onChange('country',text)}
         />
-        <ErrorMessage value={errors.firstName}/>
+        <ErrorMessage value={errors.country}/>
+        <Text style={{ fontSize: 24, marginBottom: 16 }}>Şehir</Text>
         <TextInput
           style={styles.input}
-          placeholder="Soyad"
-          value={data.lastName}
-          onChangeText={(text) => onChange('lastName',text)}
+          placeholder="Şehir"
+          value={data.city}
+          onChangeText={(text) => onChange('city',text)}
         />
-        <ErrorMessage value={errors.lastName}/>
+        <ErrorMessage value={errors.city}/>
+        <Text style={{ fontSize: 24, marginBottom: 16 }}>İlçe</Text>
         <TextInput
           style={styles.input}
-          placeholder="E-mail"
-          value={data.email}
-          onChangeText={(text) => onChange('email',text)}
+          placeholder="İlçe"
+          value={data.district}
+          onChangeText={(text) => onChange('district',text)}
         />
-        <ErrorMessage value={errors.email}/>
+        <ErrorMessage value={errors.district}/>
+        <Text style={{ fontSize: 24, marginBottom: 16 }}>Açıklama</Text>
         <TextInput
           style={styles.input}
-          placeholder="Telefon"
-          value={data.phone}
-          onChangeText={(text) => onChange('phone',text)}
+          placeholder="Açıklama"
+          value={data.description}
+          onChangeText={(text) => onChange('description',text)}
         />
-        <ErrorMessage value={errors.phone}/>
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={data.password}
-          onChangeText={(text) => onChange('password',text)}
-          secureTextEntry
-        />
-        <ErrorMessage value={errors.password}/>
+        <ErrorMessage value={errors.description}/>
         <TouchableOpacity style={styles.registerButton} onPress={handleSave}>
             <Text style={styles.buttonText}>Kaydet</Text>
         </TouchableOpacity></>)
@@ -172,4 +162,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PersonalInfoScreen;
+export default AddressDetailScreen;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet,TouchableOpacity,ActivityIndicator } from 'react-native';
-import { registerSchema } from '../validations/AuthValidation';
+import { registerSchema } from '../validations/Validation';
 import {colors} from '../themes/theme'
 import AuthService from '../services/AuthService';
 

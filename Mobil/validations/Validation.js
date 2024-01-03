@@ -24,3 +24,10 @@ export const registerSchema = yup.object().shape({
       email:yup.string().email('Yanlış format').required('Bu alan zorunludur!'),
       password:yup.string().required('Bu alan zorunludur!')
     });
+
+    export const addressSchema = yup.object().shape({
+      country:yup.string().required('Bu alan zorunludur!'),
+    city: yup.string().required('Bu alan zorunludur!'),
+    district:yup.string().required('Bu alan zorunludur!'),
+    description:yup.string().required('Bu alan zorunludur!'),
+    });
