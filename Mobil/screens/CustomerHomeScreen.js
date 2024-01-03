@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import {  Text } from 'react-native';
 import Products from '../components/Customer/Products';
 import { useAuth } from '../contexts/AuthContext';
+import Profile from '../components/Customer/Profile';
 
 
 const Tab = createBottomTabNavigator();
@@ -45,7 +46,7 @@ const CustomerHomeScreen = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={()=>(<Text>das</Text>)}
+        component={Profile}
         options={{
           headerShown:false,
           tabBarLabel: 'Profil',

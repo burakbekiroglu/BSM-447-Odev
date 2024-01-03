@@ -27,5 +27,10 @@ namespace ECommerce.Service.Dtos
             public string LastName { get; set; }
             public int TypeId { get; set; }        
         }
+
+        public class PersonalInfo:SaveRequest
+        {
+
+        }
     }
 }

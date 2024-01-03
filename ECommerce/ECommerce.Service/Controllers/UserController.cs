@@ -44,5 +44,21 @@ namespace ECommerce.Service.Controllers
             var result = await _userService.GetUserByTokenAsync(id);
             return Ok(result);
         }
+
+        [HttpGet("GetUser")]
+        public async Task<IActionResult> GetUser()
+        {
+            int id = HttpContext.User.GetUserIdFromUserClaims();
+            var result = await _userService.GetUserAsync(id);
+            return Ok(result);
+        }
+
+        [HttpPost("Save")]
+        [Transaction]
+        public async Task<IActionResult> Save(UserDto.SaveRequest model)
+        {
+            var result = await _userService.SaveAsync(model);
+            return Ok(result);
+        }
     }
 }

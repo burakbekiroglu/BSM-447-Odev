@@ -15,6 +15,7 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> SaveAsync(UserDto.SaveRequest model);
         Task<GeneralDto.Response> LoginAsync(UserDto.LoginRequest model);
         Task<GeneralDto.Response<UserDto.Authorized>> GetUserByTokenAsync(int userId);
+        Task<GeneralDto.Response> GetUserAsync(int id);
 
     }
     public class UserService : IUserService
@@ -55,7 +56,7 @@ namespace ECommerce.Service.Services
                 new Claim(ClaimTypes.Email,user.Email),
             };
 
-          
+
 
             byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
@@ -74,14 +75,14 @@ namespace ECommerce.Service.Services
         {
             if (model.Id == 0)
             {
-                var user= new User();
+                var user = new User();
                 user.TypeId = model.TypeId;
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.Email = model.Email;
                 user.Phone = model.Phone;
                 user.Password = model.Password;
-                user.CreatedDate=DateTime.Now;
+                user.CreatedDate = DateTime.Now;
                 await _context.User.AddAsync(user);
             }
             else
@@ -131,6 +132,32 @@ namespace ECommerce.Service.Services
                     LastName = user.LastName,
                     TypeId = user.TypeId,
                 }
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetUserAsync(int id)
+        {
+            var user = await _context.User.Where(w => w.Id == id).Select(s => new UserDto.PersonalInfo
+            {
+                Id = s.Id,
+                TypeId = s.TypeId,
+                FirstName = s.FirstName,
+                LastName = s.LastName,
+                Email = s.Email,
+                Password = s.Password,
+                Phone = s.Phone
+
+            }).FirstOrDefaultAsync();
+
+            if (user is null) return new GeneralDto.Response
+            {
+                Error = true,
+            };
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = user
             };
         }
     }

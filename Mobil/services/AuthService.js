@@ -21,7 +21,7 @@ const AuthService = {
       }
       return await response.json();
     } catch (error) {
-      console.log(error);w
+      console.log(error);
       throw error;
     }
   },
@@ -40,7 +40,7 @@ const AuthService = {
       }
       return await response.json();
     } catch (error) {
-      console.log(error);w
+      console.log(error);
       throw error;
     }
   },
@@ -50,8 +50,43 @@ const AuthService = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${await getToken()}`,
+          'Authorization': `Bearer ${await getToken()}`,
         },
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+    }
+  },
+  GetUser: async () => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/User/GetUser`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+    }
+  },
+  Save: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/User/save`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {

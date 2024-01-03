@@ -9,13 +9,13 @@ import SaveCategoryScreen from '../screens/SaveCategoryScreen';
 import SaveProductScreen from '../screens/SaveProductScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import Constants from '../constants/Constants';
+import PersonalInfoScreen from '../screens/PersonalInfoScreen';
 
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   const { user } = useAuth();
-  console.log(user);
   return (
     <Stack.Navigator
       initialRouteName={user ? (user.typeId === Constants.UserType.Admin ? 'AdminHome' : 'CustomerHome') : 'Login'}
@@ -47,6 +47,9 @@ const AppNavigator = () => {
       <Stack.Screen 
       name="ProductDetail" 
       component={ProductDetailScreen} />
+      <Stack.Screen 
+      name="PersonalInfo" 
+      component={PersonalInfoScreen} />
       <Stack.Screen 
       name="CustomerHome" 
       options={{
