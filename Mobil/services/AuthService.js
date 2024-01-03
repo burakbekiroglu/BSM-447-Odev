@@ -1,5 +1,9 @@
 import Constants from '../constants/Constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const getToken=async()=>{
+return await AsyncStorage.getItem('jwt');
+};
 
 const AuthService = {
   register: async (data) => {
@@ -38,6 +42,23 @@ const AuthService = {
     } catch (error) {
       console.log(error);w
       throw error;
+    }
+  },
+  GetUserByToken: async () => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/User/GetUserByToken`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
     }
   },
 };

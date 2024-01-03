@@ -68,6 +68,13 @@ namespace ECommerce.Service.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetProducts")]
+        public async Task<IActionResult> GetProducts()
+        {
+            var result = await _productService.GetProductsAsync();
+            return Ok(result);
+        }
+
 
     }
 }

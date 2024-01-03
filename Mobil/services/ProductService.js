@@ -132,6 +132,24 @@ const ProductService = {
       throw error;
     }
   },
+  GetProducts: async () => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/GetProducts`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
 };
 
 export default ProductService;

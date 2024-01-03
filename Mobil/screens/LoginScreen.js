@@ -1,28 +1,50 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet,ActivityIndicator } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import AuthService from '../services/AuthService';
 import {colors} from '../themes/theme';
+import { loginSchema } from '../validations/AuthValidation';
+import Constants from '../constants/Constants';
 
 const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);
 
 const LoginScreen = ({ navigation }) => {
-  const { login } = useAuth();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { setToken ,user } = useAuth();
+  const [isLoading,setIsLoading]=useState(false);
+ const [data,setData]=useState({
+  email:'',
+  password:''
+ });
+ const [errors, setErrors] = useState({
+  email:'',
+  password:''
+});
+
 
   const handleLogin = async () => {
     try {
-      const { token, type } = await AuthService.login(username, password);
-      login(token, type);
-      if (type === 'admin') {
-        navigation.navigate('AdminHome');
-      } else {
-        navigation.navigate('CustomerHome');
+      
+      await loginSchema.validate(data, { abortEarly: false });
+
+      setIsLoading(true);
+      const response = await AuthService.login(data);
+      setIsLoading(false);
+      if(!response  || response.error){
+        alert("Kullanıcı bilgileri hatalı");
+        return;
       }
+
+       setToken(response.data);
+        
     } catch (error) {
-      navigation.navigate('AdminHome');
-      console.error('Login error:', error.message);
+      setIsLoading(false);
+      if (error.name === 'ValidationError') {
+        const newErrors = {};
+        error.inner.forEach((e) => {
+          newErrors[e.path] = e.message;
+        });
+        setErrors(newErrors);
+      }
     }
   };
 
@@ -30,30 +52,49 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('Register');
   };
 
+  const  onChange=(key,value)=>{
+    setData({ ...data, [key]: value });
+  };
+
+  useEffect(()=>{
+    if(!user)return;
+    if(user.typeId===Constants.UserType.Admin){
+      navigation.navigate('AdminHome');
+    }else{
+      navigation.navigate('CustomerHome');
+    }
+  },[user]);
+
+
   return (
     <View style={styles.container}>
+      {isLoading?(<ActivityIndicator size="large" color="#0000ff" style={{flexDirection:"row" }} />):(
+        <>
       <Text style={styles.title}>Giriş Yap</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
+        placeholder="Email"
+        value={data.email}
+        onChangeText={(text) => onChange('email',text)}
       />
+      <ErrorMessage value={errors.email}/>
       <TextInput
         style={styles.input}
         placeholder="Password"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
+        value={data.password}
+        onChangeText={(text) => onChange('password',text)}
         secureTextEntry
       />
+      <ErrorMessage value={errors.password}/>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>Giriş Yap</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleRegister}>
-          <Text style={styles.registerLink}>Register Now</Text>
+          <Text style={styles.registerLink}>Kayıt Ol</Text>
         </TouchableOpacity>
-      </View>
+      </View></>)}
+      
     </View>
   );
 };
@@ -99,6 +140,10 @@ const styles = StyleSheet.create({
     color: 'blue',
     textAlign: 'center',
     marginTop: 10,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 8,
   },
 });
 

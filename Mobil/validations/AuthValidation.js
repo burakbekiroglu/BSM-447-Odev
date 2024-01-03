@@ -19,3 +19,8 @@ export const registerSchema = yup.object().shape({
   export const categorySchema=yup.object().shape({
         category:yup.string().required('Bu alan zorunludur!'),
   });
+
+  export const loginSchema = yup.object().shape({
+      email:yup.string().email('Yanlış format').required('Bu alan zorunludur!'),
+      password:yup.string().required('Bu alan zorunludur!')
+    });

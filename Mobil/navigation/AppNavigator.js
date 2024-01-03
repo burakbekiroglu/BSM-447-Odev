@@ -7,16 +7,18 @@ import RegisterScreen from '../screens/RegisterScreen';
 import { useAuth } from '../contexts/AuthContext';
 import SaveCategoryScreen from '../screens/SaveCategoryScreen';
 import SaveProductScreen from '../screens/SaveProductScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
+import Constants from '../constants/Constants';
 
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
-  const { token, userType } = useAuth();
-
+  const { user } = useAuth();
+  console.log(user);
   return (
     <Stack.Navigator
-      initialRouteName={token ? (userType === 'admin' ? 'AdminHome' : 'CustomerHome') : 'Login'}
+      initialRouteName={user ? (user.typeId === Constants.UserType.Admin ? 'AdminHome' : 'CustomerHome') : 'Login'}
       screenOptions={{
         headerShown: true,
         title:"BSM 447",
@@ -42,6 +44,9 @@ const AppNavigator = () => {
       <Stack.Screen 
       name="SaveCategory" 
       component={SaveCategoryScreen} />
+      <Stack.Screen 
+      name="ProductDetail" 
+      component={ProductDetailScreen} />
       <Stack.Screen 
       name="CustomerHome" 
       options={{

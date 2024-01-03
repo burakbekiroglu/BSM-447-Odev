@@ -74,7 +74,6 @@ services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = true,
 
         };
         options.Events = new JwtBearerEvents

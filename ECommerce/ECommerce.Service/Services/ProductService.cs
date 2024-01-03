@@ -23,6 +23,7 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> GetProductsForAdminAsync();
         Task<GeneralDto.Response> GetCategoriesAsync();
         Task<GeneralDto.Response> GetCategoryByIdAsync(int id);
+        Task<GeneralDto.Response> GetProductsAsync();
 
     }
     public class ProductService : IProductService
@@ -172,7 +173,11 @@ namespace ECommerce.Service.Services
             var result = await _context.ProductCategory.Select(s => new GeneralDto.Select
             {
                 Label = s.Category,
-                Value = s.Id
+                Value = s.Id,
+                Common =new
+                {
+                    Status=s.Status,
+                }
             }).ToListAsync();
 
             return new GeneralDto.Response
@@ -190,9 +195,9 @@ namespace ECommerce.Service.Services
                 Name = s.Name,
                 CategoryId = s.CategoryId,
                 Description = s.Description,
-                Amount=s.Amount,
+                Amount = s.Amount,
                 Status = s.Status,
-                Stock=s.Stock
+                Stock = s.Stock
             }).FirstOrDefaultAsync();
 
             if (product is null) return new GeneralDto.Response { Error = true };
@@ -201,6 +206,31 @@ namespace ECommerce.Service.Services
             {
                 Error = false,
                 Data = product
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetProductsAsync()
+        {
+            var products = await _context.Product
+                .Include(i => i.Category)
+                .Include(i => i.ProductImage)
+                .Where(w=>w.Status && w.Category.Status)
+                .Select(s => new ProductDto.CustomerDetail
+                {
+                    Id=s.Id,
+                    Category=s.Category.Category,
+                    CategoryId=s.CategoryId,
+                    Description=s.Description,
+                    Name=s.Name,
+                    Stock=s.Stock,
+                    Amount=s.Amount,
+                    Images=s.ProductImage.OrderBy(o=>o.Sort).Select(s=>s.FileName).ToList()
+                }).ToListAsync();
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = products
             };
         }
 
@@ -213,12 +243,12 @@ namespace ECommerce.Service.Services
                 .Select(s => new ProductDto.AdminDetail
                 {
                     Id = s.Id,
-                    CategoryId= s.CategoryId,
+                    CategoryId = s.CategoryId,
                     Category = s.Category.Category,
-                    Name=s.Name,
-                    Status=s.Status,
+                    Name = s.Name,
+                    Status = s.Status,
                     Stock = s.Stock,
-                    Image=s.ProductImage.FirstOrDefault()==null?null: s.ProductImage.FirstOrDefault().FileName
+                    Image = s.ProductImage.FirstOrDefault() == null ? null : s.ProductImage.FirstOrDefault().FileName
 
 
                 }).ToListAsync();
@@ -310,7 +340,7 @@ namespace ECommerce.Service.Services
                 product = new Product();
                 product.CategoryId = model.CategoryId;
                 product.Name = model.Name;
-                product.Description=model.Description;
+                product.Description = model.Description;
                 product.Amount = model.Amount;
                 product.Status = model.Status;
                 product.Stock = model.Stock;

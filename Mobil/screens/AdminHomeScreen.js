@@ -4,8 +4,14 @@ import { FontAwesome } from '@expo/vector-icons';
 import {  Text } from 'react-native';
 import Products from '../components/Admin/Products';
 import Categories from '../components/Admin/Categories';
-
+import { useAuth } from '../contexts/AuthContext';
 const Tab = createBottomTabNavigator();
+
+const onLogout=()=>{
+  const { logout} = useAuth();
+  logout();
+};
+
 const AdminHomeScreen = () => {
   return (
     <Tab.Navigator
@@ -37,7 +43,7 @@ const AdminHomeScreen = () => {
     />
     <Tab.Screen
       name="logout"
-      component={()=>(<Text>close</Text>)}
+      component={onLogout}
       options={{
         headerShown:false,
         tabBarLabel: 'Çıkış Yap',
