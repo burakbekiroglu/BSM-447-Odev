@@ -75,5 +75,26 @@
             public int WishListId { get; set; }
         }
 
+        public class FavProductDetail
+        {
+            public int FavId { get; set; }
+            public int Id { get; set; } = 0;
+            public string Category { get; set; }
+            public string Name { get; set; }
+            public int Stock { get; set; }
+            public string? Image { get; set; }
+            public double Amount { get; set; }
+        }
+        public class WishListDetail
+        {
+            public int WishListId { get; set; }
+            public int Id { get; set; } = 0;
+            public string Category { get; set; }
+            public string Name { get; set; }
+            public int Stock { get; set; }
+            public string? Image { get; set; }
+            public double Amount { get; set; }
+        }
+
     }
 }

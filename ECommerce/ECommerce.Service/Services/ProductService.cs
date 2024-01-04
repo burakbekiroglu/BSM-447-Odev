@@ -26,7 +26,8 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> GetProductsAsync();
         Task<GeneralDto.Response> GetProductForCustomerAsync(int id);
         Task<GeneralDto.Response> GetProductFavWishListInfoAsync(ProductDto.ProductFavAndWishlistInfoRequest model);
-
+        Task<GeneralDto.Response> GetFavProductsAsync(int userId);
+        Task<GeneralDto.Response> GetWishListProductsAsync(int userId);
     }
     public class ProductService : IProductService
     {
@@ -189,6 +190,34 @@ namespace ECommerce.Service.Services
             };
         }
 
+        public async Task<GeneralDto.Response> GetFavProductsAsync(int userId)
+        {
+            var products = await _context.Product
+                .AsSplitQuery()
+                .Include(i => i.ProductImage)
+                .Include(i => i.Category)
+                .Include(i=>i.UserFavProduct)
+                .Where(w=>w.Status && w.UserFavProduct.Any(a=>a.UserId==userId))
+                .Select(s => new ProductDto.FavProductDetail
+                {
+                    FavId=s.UserFavProduct.FirstOrDefault().Id,
+                    Id = s.Id,
+                    Category = s.Category.Category,
+                    Name = s.Name,
+                    Stock = s.Stock,
+                    Amount=s.Amount,
+                    Image = s.ProductImage.FirstOrDefault() == null ? null : s.ProductImage.FirstOrDefault().FileName
+
+
+                }).ToListAsync();
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = products
+            };
+        }
+
         public async Task<GeneralDto.Response> GetProductByIdAsync(int id)
         {
             var product = await _context.Product.Where(w => w.Id == id).Select(s => new ProductDto.SaveProductRequest
@@ -296,6 +325,32 @@ namespace ECommerce.Service.Services
                     Image = s.ProductImage.FirstOrDefault() == null ? null : s.ProductImage.FirstOrDefault().FileName
 
 
+                }).ToListAsync();
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = products
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetWishListProductsAsync(int userId)
+        {
+            var products = await _context.Product
+                .AsSplitQuery()
+                .Include(i => i.ProductImage)
+                .Include(i => i.Category)
+                .Include(i => i.WishList)
+                .Where(w => w.Status && w.WishList.Any(a => a.UserId == userId))
+                .Select(s => new ProductDto.WishListDetail
+                {
+                    WishListId = s.WishList.FirstOrDefault().Id,
+                    Id = s.Id,
+                    Category = s.Category.Category,
+                    Name = s.Name,
+                    Stock = s.Stock,
+                    Amount = s.Amount,
+                    Image = s.ProductImage.FirstOrDefault() == null ? null : s.ProductImage.FirstOrDefault().FileName
                 }).ToListAsync();
 
             return new GeneralDto.Response

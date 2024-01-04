@@ -17,12 +17,12 @@ const Profile = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('RequestList')}>
+          onPress={() => navigation.navigate('WishList')}>
           <Text style={styles.buttonText}>İstek Listem</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Favorites')}>
+          onPress={() => navigation.navigate('FavProducts')}>
           <Text style={styles.buttonText}>Favoriler</Text>
         </TouchableOpacity>
       </View>

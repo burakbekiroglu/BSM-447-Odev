@@ -281,6 +281,44 @@ const ProductService = {
       throw error;
     }
   },
+  GetWishListProducts: async () => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/GetWishListProducts`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
+  GetFavProducts: async () => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/GetFavProducts`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
 };
 
 export default ProductService;

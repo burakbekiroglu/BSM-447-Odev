@@ -74,7 +74,7 @@ const ProductDetailScreen = ({route}) => {
     setIsLoading(false);
 
     if(response && !response.error){
-      alert('Ürün Favorilerinize Eklendi')
+      alert('Ürün İstek Listenize Eklendi')
       await getFavWishListInfo();
     }else{
       alert('Bir hata oluştu...')

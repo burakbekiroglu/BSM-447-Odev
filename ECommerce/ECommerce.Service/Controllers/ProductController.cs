@@ -1,4 +1,5 @@
 ﻿using ECommerce.Service.Dtos;
+using ECommerce.Service.Helpers;
 using ECommerce.Service.Middlewares;
 using ECommerce.Service.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -120,6 +121,21 @@ namespace ECommerce.Service.Controllers
         public async Task<IActionResult> GetProductFavWishListInfo(ProductDto.ProductFavAndWishlistInfoRequest model)
         {
             var result = await _productService.GetProductFavWishListInfoAsync(model);
+            return Ok(result);
+        }
+
+        [HttpGet("GetFavProducts")]
+        public async Task<IActionResult> GetFavProducts()
+        {
+            var userId = HttpContext.User.GetUserIdFromUserClaims();
+            var result = await _productService.GetFavProductsAsync(userId);
+            return Ok(result);
+        }
+        [HttpGet("GetWishListProducts")]
+        public async Task<IActionResult> GetWishListProducts()
+        {
+            var userId = HttpContext.User.GetUserIdFromUserClaims();
+            var result = await _productService.GetWishListProductsAsync(userId);
             return Ok(result);
         }
     }
