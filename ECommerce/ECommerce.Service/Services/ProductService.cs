@@ -9,7 +9,7 @@ namespace ECommerce.Service.Services
     {
         Task<GeneralDto.Response> SaveFavProductAsync(ProductDto.SaveFavProductRequest model);
         Task<GeneralDto.Response> DeleteFavProductByIdAsync(int id);
-        Task<GeneralDto.Response> SaveWishListAsync(ProductDto.SaveFavProductRequest model);
+        Task<GeneralDto.Response> SaveWishListAsync(ProductDto.SaveWishListRequest model);
         Task<GeneralDto.Response> DeleteWishListByIdAsync(int id);
         Task<GeneralDto.Response> SaveCategoryAsync(ProductDto.SaveCategoryRequest model);
         Task<GeneralDto.Response> DeleteCategoryByIdAsync(int id);
@@ -25,6 +25,7 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> GetCategoryByIdAsync(int id);
         Task<GeneralDto.Response> GetProductsAsync();
         Task<GeneralDto.Response> GetProductForCustomerAsync(int id);
+        Task<GeneralDto.Response> GetProductFavWishListInfoAsync(ProductDto.ProductFavAndWishlistInfoRequest model);
 
     }
     public class ProductService : IProductService
@@ -207,6 +208,24 @@ namespace ECommerce.Service.Services
             {
                 Error = false,
                 Data = product
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetProductFavWishListInfoAsync(ProductDto.ProductFavAndWishlistInfoRequest model)
+        {
+            var result = new ProductDto.ProductFavAndWishlistInfo();
+
+            var fav = await _context.UserFavProduct.FirstOrDefaultAsync(a => a.ProductId == model.ProductId && a.UserId == model.UserId);
+            var wishList = await _context.WishList.FirstOrDefaultAsync(a => a.ProductId == model.ProductId && a.UserId == model.UserId);
+
+            if(fav is not null) result.FavId = fav.Id;
+            if(wishList is not null) result.WishListId= wishList.Id;
+
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = result
             };
         }
 
@@ -435,7 +454,7 @@ namespace ECommerce.Service.Services
 
         }
 
-        public async Task<GeneralDto.Response> SaveWishListAsync(ProductDto.SaveFavProductRequest model)
+        public async Task<GeneralDto.Response> SaveWishListAsync(ProductDto.SaveWishListRequest model)
         {
             var checkProduct = await _context.Product.AnyAsync(w => w.Id == model.ProductId && w.Status);
             if (!checkProduct) return new GeneralDto.Response

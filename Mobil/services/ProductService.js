@@ -181,6 +181,106 @@ const ProductService = {
       throw error;
     }
   },
+  SaveFavProduct: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/SaveFavProduct`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
+  SaveWishList: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/SaveWishList`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
+  DeleteFavProductById: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/DeleteFavProductById`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
+  DeleteWishListById: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/DeleteWishListById`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
+  GetProductFavWishListInfo: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/GetProductFavWishListInfo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);w
+      throw error;
+    }
+  },
 };
 
 export default ProductService;

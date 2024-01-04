@@ -148,7 +148,7 @@ namespace ECommerce.Service.Services
 
             var newCart = new Cart();
             newCart.StatusId = (int)Enums.CartStatus.New;
-            newCart.Id = userId;
+            newCart.UserId = userId;
             newCart.CreatedDate = DateTime.Now;
             await _context.Cart.AddAsync(newCart);
             await _context.SaveChangesAsync();

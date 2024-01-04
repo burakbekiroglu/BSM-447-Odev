@@ -1,11 +1,16 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, Image, Button, ScrollView, StyleSheet, Dimensions,TouchableOpacity,ActivityIndicator } from 'react-native';
 import ProductService from '../services/ProductService';
+import {useAuth} from '../contexts/AuthContext';
+import CartService from '../services/CartService';
 
 const ProductDetailScreen = ({route}) => {
   const { id } = route.params;
+  const{user}=useAuth();
   const [quantity, setQuantity] = useState(1);
   const [isLoading,setIsLoading]=useState(false);
+  const [isFav,setIsFav]=useState(0);
+  const[isWishList,setIsWishList]=useState(0);
   const [product,setProduct]=useState({
     name: '',
     category:'',
@@ -35,25 +40,72 @@ const ProductDetailScreen = ({route}) => {
     }
   };
 
+  const getFavWishListInfo=async()=>{
+    setIsLoading(true);
+    const response = await  ProductService.GetProductFavWishListInfo({userId:user.id,productId:id});
+    setIsLoading(false);
+    if(response && !response.error){
+      const {data}=response;
+      setIsFav(data.favId);
+      setIsWishList(data.wishListId);
+    }
+  };
+
 
   useLayoutEffect(()=>{
 (async()=>{
   await getProduct();
+  await getFavWishListInfo();
 })();
   },[id]);
 
-
-
-  const addToCart = () => {
-    console.log(`Sepete eklendi: ${quantity} adet ${product.name}`);
+  const addToCart = async() => {
+    const response= await CartService.SaveCartItem({productId:id,quantity:quantity});
+    if(response && !response.error){
+      alert("Ürün sepete eklendi")
+    }else{
+      alert("ürün sepete eklenirken hata oluştu");
+    }
   };
 
-  const addToWishlist = () => {
-    console.log(`İstek listesine eklendi: ${product.name}`);
+  const addToWishlist =  async() => {
+    setIsLoading(true);
+    const response = await ProductService.SaveWishList({userId:user.id,productId:id});
+    setIsLoading(false);
+
+    if(response && !response.error){
+      alert('Ürün Favorilerinize Eklendi')
+      await getFavWishListInfo();
+    }else{
+      alert('Bir hata oluştu...')
+    }
   };
 
-  const addToFav=()=>{
+  const addToFav= async()=>{
+    setIsLoading(true);
+    const response = await ProductService.SaveFavProduct({userId:user.id,productId:id});
+    setIsLoading(false);
 
+    if(response && !response.error){
+      alert('Ürün Favorilerinize Eklendi')
+      await getFavWishListInfo();
+    }else{
+      alert('Bir hata oluştu...')
+    }
+  };
+
+  const deleteFromFav=async()=>{
+    const response= await ProductService.DeleteFavProductById({id:isFav});
+    if(response && !response.error){
+       await getFavWishListInfo();
+    }
+  }
+
+  const deleteFromWishList=async()=>{
+    const response= await ProductService.DeleteWishListById({id:isWishList});
+    if(response && !response.error){
+       await getFavWishListInfo();
+    }
   };
 
   return (
@@ -82,12 +134,16 @@ const ProductDetailScreen = ({route}) => {
         <TouchableOpacity disabled={quantity>product.stock} style={styles.addToCartButton}  onPress={addToCart} >
         Sepete Ekle
         </TouchableOpacity>
-        <TouchableOpacity style={styles.addToWishlistButton}  onPress={addToWishlist} >
+        {isWishList===0?(<TouchableOpacity style={styles.addToWishlistButton}  onPress={addToWishlist} >
         İstek Listesine Ekle
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.addToFavButton} onPress={addToFav} >
+        </TouchableOpacity>):(<TouchableOpacity style={styles.addToWishlistButton}  onPress={deleteFromWishList} >
+        İstek Listesinden Kaldır
+        </TouchableOpacity>)}        
+        {isFav===0?( <TouchableOpacity style={styles.addToFavButton} onPress={addToFav} >
         Favorilere Ekle
-        </TouchableOpacity>
+        </TouchableOpacity>):( <TouchableOpacity style={styles.addToFavButton} onPress={deleteFromFav} >
+        Favorilererden Kaldır
+        </TouchableOpacity>)}
         </View>
       </View>
       </>)}

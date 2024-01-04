@@ -84,5 +84,43 @@ namespace ECommerce.Service.Controllers
             return Ok(result);
         }
 
+        [HttpPost("SaveFavProduct")]
+        [Transaction]
+        public async Task<IActionResult> SaveFavProduct(ProductDto.SaveFavProductRequest model)
+        {
+            var result = await _productService.SaveFavProductAsync(model);
+            return Ok(result);
+        }
+
+        [HttpPost("SaveWishList")]
+        [Transaction]
+        public async Task<IActionResult> SaveWishList(ProductDto.SaveWishListRequest model)
+        {
+            var result = await _productService.SaveWishListAsync(model);
+            return Ok(result);
+        }
+
+        [HttpPost("DeleteFavProductById")]
+        [Transaction]
+        public async Task<IActionResult> DeleteFavProductById(GeneralDto.IdRequest model)
+        {
+            var result = await _productService.DeleteFavProductByIdAsync(model.Id);
+            return Ok(result);
+        }
+
+        [HttpPost("DeleteWishListById")]
+        [Transaction]
+        public async Task<IActionResult> DeleteWishListById(GeneralDto.IdRequest model)
+        {
+            var result = await _productService.DeleteWishListByIdAsync(model.Id);
+            return Ok(result);
+        }
+
+        [HttpPost("GetProductFavWishListInfo")]
+        public async Task<IActionResult> GetProductFavWishListInfo(ProductDto.ProductFavAndWishlistInfoRequest model)
+        {
+            var result = await _productService.GetProductFavWishListInfoAsync(model);
+            return Ok(result);
+        }
     }
 }

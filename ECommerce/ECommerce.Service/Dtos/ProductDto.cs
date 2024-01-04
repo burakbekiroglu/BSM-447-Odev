@@ -64,5 +64,16 @@
             public List<string> Images { get; set; }
         }
 
+        public class ProductFavAndWishlistInfoRequest
+        {
+            public int UserId { get; set; }
+            public int ProductId { get; set; }
+        }
+        public class ProductFavAndWishlistInfo
+        {
+            public int FavId { get; set; }
+            public int WishListId { get; set; }
+        }
+
     }
 }
