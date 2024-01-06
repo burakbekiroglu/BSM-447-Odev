@@ -29,5 +29,21 @@ namespace ECommerce.Service.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetCartDetailByUserId")]
+        [Transaction]
+        public async Task<IActionResult> GetCartDetailByUserId()
+        {
+            var userId = HttpContext.User.GetUserIdFromUserClaims();
+            var result = await _cartService.GetCartDetailByUserIdAsync( userId);
+            return Ok(result);
+        }
+
+        [HttpPost("DeleteCardById")]
+        [Transaction]
+        public async Task<IActionResult> DeleteCardById(GeneralDto.IdRequest model)
+        {
+            var result = await _cartService.DeleteCardByIdAsync(model.Id);
+            return Ok(result);
+        }
     }
 }

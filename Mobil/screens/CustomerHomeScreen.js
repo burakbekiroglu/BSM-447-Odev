@@ -5,6 +5,7 @@ import {  Text } from 'react-native';
 import Products from '../components/Customer/Products';
 import { useAuth } from '../contexts/AuthContext';
 import Profile from '../components/Customer/Profile';
+import Cart from '../components/Customer/Cart';
 
 
 const Tab = createBottomTabNavigator();
@@ -37,7 +38,7 @@ const CustomerHomeScreen = () => {
       />
       <Tab.Screen
         name="Cart"
-        component={()=>(<Text>hodsadme</Text>)}
+        component={Cart}
         options={{
           headerShown:false,
           tabBarLabel: 'Sepet',

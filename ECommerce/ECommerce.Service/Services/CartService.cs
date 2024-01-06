@@ -11,6 +11,8 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> SaveCartItemAsync(CartDto.CartItemSaveRequest model, int userId);
         Task<GeneralDto.Response> ChangeCartItemQuantityAsync(CartDto.CartItemChangeQuantity model);
         Task<GeneralDto.Response> CartToOrderAsync(int cartId);
+        Task<GeneralDto.Response> GetCartDetailByUserIdAsync(int userId);
+
 
     }
     public class CartService : ICartService
@@ -100,6 +102,51 @@ namespace ECommerce.Service.Services
             {
                 Error = false,
                 Message = "Cart deleted successfully"
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetCartDetailByUserIdAsync(int userId)
+        {
+            var user = await _context.User.AnyAsync(a => a.Id == userId);
+            if (!user) return new GeneralDto.Response
+            {
+                Error = true,
+                Message = "Invalid user"
+            };
+
+
+            var cartId = await GetCartIdByUserId(userId);
+
+            var cartItems = await _context.CartItem
+                .AsSplitQuery()
+                .Include(i=>i.Product)
+                .ThenInclude(T=>T.ProductImage)
+                .Include(i=>i.Product)
+                .ThenInclude(t=>t.Category)
+                .Where(w => w.CartId == cartId)
+                .GroupBy(g => g.ProductId)
+                .Select(s => new CartDto.CartItemDetail
+                {
+                    ProductId = s.Key,
+                    Name=s.FirstOrDefault().Product.Name,
+                    Category=s.FirstOrDefault().Product.Category.Category,
+                    Quantity=s.Sum(s2=>s2.Quantity),
+                    Total=s.Sum(s2=>s2.Quantity*s2.Amount),
+                    Image=s.FirstOrDefault().Product.ProductImage.FirstOrDefault().FileName                  
+                }).ToListAsync();
+
+            var result = new CartDto.CartDetail
+            {
+                CartId = cartId,
+                Total=cartItems.Sum(s=>s.Total),
+                CartItems = cartItems
+            };
+
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = result
             };
         }
 
