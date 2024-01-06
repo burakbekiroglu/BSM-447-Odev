@@ -1,11 +1,11 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet,Picker ,Switch,ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet ,Switch,ActivityIndicator } from 'react-native';
 import ProductService from '../services/ProductService';
 import { categorySchema } from '../validations/Validation';
 
-const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);
+const ErrorMessage=({value})=>(value && <Text style={styles.errorText}>{value}</Text>);
 
-const SaveProductScreen=({route})=>{
+const SaveCategoryScreen=({route})=>{
     const [isLoading,setIsLoading]=useState(false);
     const { id } = route.params;
     const [data,setData]=useState({
@@ -68,10 +68,10 @@ const SaveProductScreen=({route})=>{
       };
 
     return (
-        <View style={styles.container}>
-          <Text style={styles.title}>Kategori İşlemleri</Text> 
-        
-        {isLoading?( <ActivityIndicator size="large" color="#0000ff" style={{flexDirection:"row" }} />):(<> 
+        <View style={styles.container}>  
+        {isLoading?( <ActivityIndicator size="large" color="#0000ff" style={{flexDirection:"row" }} />):(
+        <> 
+        <Text style={styles.title}>Kategori İşlemleri</Text> 
             <Text style={{ fontSize: 24, marginBottom: 16 }}>Kategori</Text>
         <TextInput
           style={styles.input}
@@ -90,7 +90,8 @@ const SaveProductScreen=({route})=>{
       />
    <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.buttonText}>Kaydet</Text>
-        </TouchableOpacity>  </>) }
+     </TouchableOpacity>  
+     </>) }
         
         </View>
       );
@@ -148,4 +149,4 @@ const styles = StyleSheet.create({
       },
   });
 
-export default SaveProductScreen;
+export default SaveCategoryScreen;

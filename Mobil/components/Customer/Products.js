@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
   },
   list: {
      paddingHorizontal: 15,
-     flexGrow:'initial',
   },
   categoryItem: {
      backgroundColor: '#f9c2ff',

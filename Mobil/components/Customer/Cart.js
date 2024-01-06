@@ -76,14 +76,14 @@ const Cart = ({ navigation }) => {
             style={styles.productList}  
           />
         
-        <Text style={styles.buttonContainer}>
+        
         <TouchableOpacity style={styles.paymentButton} onPress={()=>navigation.navigate('Payment',{id:cart.cartId,total:cart.total})} >
             <Text style={styles.buttonText}>Öde {cart?.total}₺</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.clearButton} onPress={deleteCart} >
-            <Text style={styles.buttonText}><FontAwesome name="trash" color={'white'} size={20} /></Text>
+            <Text style={styles.buttonText}>Sepeti Boşalt <FontAwesome name="trash" color={'white'} size={20} /></Text>
         </TouchableOpacity>
-        </Text>
+       
         </>
           ):(<Text style={styles.infoText}>Sepetinizde ürün bulunmamaktadır</Text>)      
     }
@@ -144,8 +144,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer:{
     display:'flex',
-    justifyContent: 'space-between',
-    marginHorizontal:10,
+    justifyContent:'space-between',
+    alignContent:'space-between',
+    marginHorizontal:5,
     marginVertical:10
   },
   buttonText: {
@@ -157,14 +158,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#AAD9BB',
     borderRadius: 12,
     paddingVertical: 12,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
     marginBottom: 16,
   },
   clearButton:{
     backgroundColor: '#FAEF5D',
     borderRadius: 12,
     paddingVertical: 12,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
     marginBottom: 16,
   }
  });

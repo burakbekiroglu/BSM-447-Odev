@@ -1,11 +1,12 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet,Picker ,Switch,ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity,ScrollView, StyleSheet ,Switch,ActivityIndicator } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import ProductService from '../services/ProductService';
 import { productSchema } from '../validations/Validation';
 
 const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);
 
-const SaveProductScreen=({route})=>{
+const SaveProductScreen=({navigation,route})=>{
     const [isLoading,setIsLoading]=useState(false);
     const[categories,setCategories]=useState([{label:"Kategori Seçiniz", value:0}]);
     const { id } = route.params;
@@ -57,6 +58,9 @@ const SaveProductScreen=({route})=>{
             }
           }
     };
+    const goToProdcutImages=()=>{
+      navigation.navigate("SaveProductImage",{id:id});
+    }
 
     const getCategories= async ()=>{
         const response = await ProductService.CategorySelectOptions();
@@ -84,7 +88,7 @@ const SaveProductScreen=({route})=>{
       };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
           <Text style={styles.title}>Ürün İşlemleri</Text> 
         
         {isLoading?( <ActivityIndicator size="large" color="#0000ff" style={{flexDirection:"row" }} />):(<> 
@@ -102,7 +106,7 @@ const SaveProductScreen=({route})=>{
         style={styles.picker}
         onValueChange={(itemValue, itemIndex) => onChange("categoryId",itemValue)}
       >
-        {categories.map(m=> (<Picker.Item key={m.id}  label={m.label} value={m.value}/>))}
+        {categories.map(m=> (<Picker.Item key={m.label} label={m.label} value={m.value}/>))}
       </Picker>
       <ErrorMessage value={errors.categoryId}/>
       <Text style={{ fontSize: 24, marginBottom: 16 }}>Açıklama</Text>
@@ -117,7 +121,7 @@ const SaveProductScreen=({route})=>{
         <TextInput
           style={styles.input}
           placeholder="Tutar"
-          value={data.amount}
+          value={data.amount.toString()}
           onChangeText={(text) => onChange('amount',text)}
         />
         <ErrorMessage value={errors.amount}/>
@@ -125,7 +129,7 @@ const SaveProductScreen=({route})=>{
         <TextInput
           style={styles.input}
           placeholder="Stok"
-          value={data.stock}
+          value={data.stock.toString()}
           onChangeText={(text) => onChange('stock',text)}
         />
         <ErrorMessage value={errors.stock}/>
@@ -139,17 +143,23 @@ const SaveProductScreen=({route})=>{
       />
    <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.buttonText}>Kaydet</Text>
-        </TouchableOpacity>  </>) }
+   </TouchableOpacity>  
+   {id>0 &&(<TouchableOpacity style={styles.imageButton} onPress={goToProdcutImages}>
+            <Text style={styles.buttonText}>Ürün Resimleri</Text>
+   </TouchableOpacity>)}
+   
         
-        </View>
+        </>) }
+        
+        </ScrollView>
       );
 };
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      alignItems:'center',
       paddingHorizontal: 16,
+      marginBottom:2
     },
     title: {
       fontSize: 20,
@@ -191,6 +201,14 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 24,
         marginBottom: 14,
+      },
+      imageButton: {
+        marginTop:5,
+        backgroundColor: "#FFE7C1",
+        borderRadius: 12,
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        marginBottom: 15,
       },
       errorText: {
         color: 'red',

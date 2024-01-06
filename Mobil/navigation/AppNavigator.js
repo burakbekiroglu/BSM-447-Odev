@@ -15,6 +15,7 @@ import AddressDetailScreen from '../screens/AddressDetailScreen';
 import FavProductsScreen from '../screens/FavProductsScreen';
 import WishListScreen from '../screens/WishListScreen';
 import PaymentScreen from '../screens/PaymentScreen';
+import SaveProductImageScreen from '../screens/SaveProductImageScreen';
 
 
 const Stack = createStackNavigator();
@@ -46,6 +47,9 @@ const AppNavigator = () => {
       <Stack.Screen 
       name="SaveProduct" 
       component={SaveProductScreen} />
+       <Stack.Screen 
+      name="SaveProductImage" 
+      component={SaveProductImageScreen} />
       <Stack.Screen 
       name="SaveCategory" 
       component={SaveCategoryScreen} />

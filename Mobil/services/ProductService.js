@@ -319,6 +319,25 @@ const ProductService = {
       throw error;
     }
   },
+  SaveProductImages: async (data) => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/Product/SaveProductImages`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+        body: data,
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
 };
 
 export default ProductService;

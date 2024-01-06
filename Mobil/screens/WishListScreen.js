@@ -54,9 +54,10 @@ const WishListScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>İstek Listesi</Text>
+        
       {isLoading?( <ActivityIndicator size="large" color="#0000ff" style={{flexDirection:"row" }} />):(
       <>
+      <Text style={styles.title}>İstek Listesi</Text>
       {products?.length>0?(<FlatList
       data={products}
       renderItem={productRenderItem}

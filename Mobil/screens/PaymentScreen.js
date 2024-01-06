@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Picker,TouchableOpacity,ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView,TouchableOpacity,ActivityIndicator } from 'react-native';
 import AddressService from '../services/AddressService';
 import OrderService from '../services/OrderService';
 import { paymentSchema } from '../validations/Validation';
-
+import {Picker} from '@react-native-picker/picker';
 const ErrorMessage=({value})=>(value ? <Text style={styles.errorText}>{value}</Text> : null);
 
 const PaymentScreen = ({navigation,route}) => {
@@ -94,7 +94,7 @@ const PaymentScreen = ({navigation,route}) => {
             onValueChange={(itemValue) => setData({...data,addressId:itemValue})}
           >
             {addreses.map((item) => (
-              <Picker.Item key={item.value} label={item.label} value={item.value} />
+              <Picker.Item key={item.label} label={item.label} value={item.value} />
             ))}
           </Picker>
           <ErrorMessage value={errors.addressId}/>

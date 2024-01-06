@@ -1,4 +1,6 @@
-﻿namespace ECommerce.Service.Dtos
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace ECommerce.Service.Dtos
 {
     public class ProductDto
     {
@@ -33,12 +35,12 @@
         public class SaveProductImageRequest
         {
             public int ProductId { get; set; }
-            public List<ProductImageSaveDetail> Files { get; set; }
+            public List<ProductImageSaveDetail> Files { get; set; } = new List<ProductImageSaveDetail>();
         }
         public class ProductImageSaveDetail
         {
             public IFormFile File { get; set; }
-            public int Sort { get; set; }
+            public int Sort { get; set; } = 0;
             public bool Status { get; set; } = true;
         }
 

@@ -132,17 +132,17 @@ const ProductDetailScreen = ({route}) => {
         </View>
         <View style={styles.buttonContainer}>
         <TouchableOpacity disabled={quantity>product.stock} style={styles.addToCartButton}  onPress={addToCart} >
-        Sepete Ekle
+        <Text>Sepete Ekle</Text>
         </TouchableOpacity>
         {isWishList===0?(<TouchableOpacity style={styles.addToWishlistButton}  onPress={addToWishlist} >
-        İstek Listesine Ekle
+          <Text>İstek Listesine Ekle</Text>
         </TouchableOpacity>):(<TouchableOpacity style={styles.addToWishlistButton}  onPress={deleteFromWishList} >
-        İstek Listesinden Kaldır
+          <Text>İstek Listesinden Kaldır</Text>
         </TouchableOpacity>)}        
         {isFav===0?( <TouchableOpacity style={styles.addToFavButton} onPress={addToFav} >
-        Favorilere Ekle
+          <Text>Favorilere Ekle</Text>
         </TouchableOpacity>):( <TouchableOpacity style={styles.addToFavButton} onPress={deleteFromFav} >
-        Favorilererden Kaldır
+          <Text> Favorilererden Kaldır</Text>
         </TouchableOpacity>)}
         </View>
       </View>

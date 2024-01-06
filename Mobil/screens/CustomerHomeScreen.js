@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons'; 
 import {  Text } from 'react-native';
@@ -10,16 +10,20 @@ import Cart from '../components/Customer/Cart';
 
 const Tab = createBottomTabNavigator();
 
-const onLogout=()=>{
+const OnLogout=({navigation})=>{
   const { logout} = useAuth();
   logout();
+  useLayoutEffect(()=>{
+    logout();
+    navigation.navigate('Login');
+  },[]);
 };
 
 
 const CustomerHomeScreen = () => {
   return (
     <Tab.Navigator
-      tabBarOptions={{
+      screenOptions={{
         activeTintColor: '#3498db', 
         inactiveTintColor: 'gray', 
       }}
@@ -31,9 +35,6 @@ const CustomerHomeScreen = () => {
           headerShown:false,
           tabBarLabel: 'Mağaza',
           tabBarIcon: ({ color, size }) => <FontAwesome name="home" color={color} size={size} />,
-          tabBarStyle:{
-            
-          }
         }}
       />
       <Tab.Screen
@@ -56,7 +57,7 @@ const CustomerHomeScreen = () => {
       />
       <Tab.Screen
         name="logout"  
-        component={onLogout}
+        component={OnLogout}
         options={{
           headerShown:false,
           tabBarLabel: 'Çıkış Yap',

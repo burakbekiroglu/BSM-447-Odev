@@ -138,5 +138,28 @@ namespace ECommerce.Service.Controllers
             var result = await _productService.GetWishListProductsAsync(userId);
             return Ok(result);
         }
+
+        [HttpPost("SaveProductImages")]
+        [Transaction]
+        public async Task<IActionResult> SaveProductImages([FromForm]ProductDto.SaveProductImageRequest model)
+        {
+            var result = await _productService.SaveProductImagesAsync(model);
+            return Ok(result);
+        }
+
+        [HttpPost("GetProductImages")]
+        public async Task<IActionResult> GetProductImages( GeneralDto.IdRequest model)
+        {
+            var result = await _productService.GetProductImagesAsync(model.Id);
+            return Ok(result);
+        }
+
+        [HttpPost("GetProductImages")]
+        [Transaction]
+        public async Task<IActionResult> DeleteProductImageById(GeneralDto.IdRequest model)
+        {
+            var result = await _productService.DeleteProductImageByIdAsync(model.Id);
+            return Ok(result);
+        }
     }
 }

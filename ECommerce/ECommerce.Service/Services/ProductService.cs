@@ -28,6 +28,7 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> GetProductFavWishListInfoAsync(ProductDto.ProductFavAndWishlistInfoRequest model);
         Task<GeneralDto.Response> GetFavProductsAsync(int userId);
         Task<GeneralDto.Response> GetWishListProductsAsync(int userId);
+        Task<GeneralDto.Response> GetProductImagesAsync(int productId);
     }
     public class ProductService : IProductService
     {
@@ -280,6 +281,17 @@ namespace ECommerce.Service.Services
             {
                 Error = product == null ? true : false,
                 Data = product
+            };
+        }
+
+        public async Task<GeneralDto.Response> GetProductImagesAsync(int productId)
+        {
+            var images = await _context.ProductImage.Where(w => w.Status && w.ProductId == productId).Select(s => s.FileName).ToListAsync();
+
+            return new GeneralDto.Response
+            {
+                Error = false,
+                Data = images
             };
         }
 

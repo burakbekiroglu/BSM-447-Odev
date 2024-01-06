@@ -54,9 +54,10 @@ const FavProductsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Favoriler</Text>
+        
       {isLoading?( <ActivityIndicator size="large" color="#0000ff" style={{flexDirection:"row" }} />):(
       <>
+      <Text style={styles.title}>Favoriler</Text>
       {products?.length>0?(<FlatList
       data={products}
       renderItem={productRenderItem}

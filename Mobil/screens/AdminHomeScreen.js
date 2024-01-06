@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useLayoutEffect} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons'; 
 import {  Text } from 'react-native';
@@ -7,15 +7,19 @@ import Categories from '../components/Admin/Categories';
 import { useAuth } from '../contexts/AuthContext';
 const Tab = createBottomTabNavigator();
 
-const onLogout=()=>{
+const OnLogout=({navigation})=>{
   const { logout} = useAuth();
   logout();
+  useLayoutEffect(()=>{
+    logout();
+    navigation.navigate('Login');
+  },[]);
 };
 
 const AdminHomeScreen = () => {
   return (
     <Tab.Navigator
-    tabBarOptions={{
+    screenOptions={{
       activeTintColor: '#3498db', 
       inactiveTintColor: 'gray', 
     }}
@@ -27,9 +31,7 @@ const AdminHomeScreen = () => {
         headerShown:false,
         tabBarLabel: 'Ürünler',
         tabBarIcon: ({ color, size }) => <FontAwesome name="shopping-cart" color={color} size={size} />,
-        tabBarStyle:{
-          
-        }
+
       }}
     />
     <Tab.Screen
@@ -43,7 +45,7 @@ const AdminHomeScreen = () => {
     />
     <Tab.Screen
       name="logout"
-      component={onLogout}
+      component={OnLogout}
       options={{
         headerShown:false,
         tabBarLabel: 'Çıkış Yap',

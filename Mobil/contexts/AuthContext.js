@@ -11,13 +11,15 @@ const AuthProvider = ({ children }) => {
 
 
 
-  const logout = () => {
+  const logout = async () => {
+    await AsyncStorage.removeItem('jwt');
     setToken(null);
     setUser(null);
   };
 
   const initial=async()=>{
     setIsLoading(true);
+
     await AsyncStorage.setItem('jwt', token);
     const response = await AuthService.GetUserByToken();
     setIsLoading(false);
@@ -27,12 +29,16 @@ const AuthProvider = ({ children }) => {
   };
 
   const getToken=async()=>{
-     setToken(await AsyncStorage.getItem('jwt'));
+    const  tkn=await AsyncStorage.getItem('jwt');
+    if(tkn)setToken(tkn);
+  
   };
 
   useEffect(()=>{
     (async()=>{ 
-      await initial();
+      if(token){
+        await initial();
+      }
     })();
   },[token]);
 
