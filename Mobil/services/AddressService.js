@@ -78,6 +78,23 @@ const AddressService = {
     } catch (error) {
     }
   },
+  GetUserAddressSelectOptions: async () => {
+    try {
+      const response = await fetch(`${Constants.ServiceUrl}/address/GetUserAddressSelectOptions`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('error');
+      }
+      return await response.json();
+    } catch (error) {
+    }
+  },
 };
 
 export default AddressService;

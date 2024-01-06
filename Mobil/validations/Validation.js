@@ -31,3 +31,11 @@ export const registerSchema = yup.object().shape({
     district:yup.string().required('Bu alan zorunludur!'),
     description:yup.string().required('Bu alan zorunludur!'),
     });
+
+    export const paymentSchema=yup.object().shape({
+      addressId:yup.number().min(1,"Adres seçiniz!").required('Bu alan zorunludur!'),
+        cardNumber:yup.string().required('Bu alan zorunludur!'),
+        fullName: yup.string().required('Bu alan zorunludur!'),
+        cvv:yup.string().required('Bu alan zorunludur!'),
+        validDate:yup.string().required('Bu alan zorunludur!'),
+    });

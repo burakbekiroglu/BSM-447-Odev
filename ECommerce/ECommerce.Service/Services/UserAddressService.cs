@@ -11,6 +11,7 @@ namespace ECommerce.Service.Services
         Task<GeneralDto.Response> DeleteAsync(int id);
         Task<GeneralDto.Response> GetUserAddresesAsync(int userId);
         Task<GeneralDto.Response> GetAddressByIdAsync(int id);
+        Task<GeneralDto.Response> GetUserAddressSelectOptionsAsync(int userId);
     }
     public class UserAddressService : IUserAddressService
     {
@@ -36,7 +37,7 @@ namespace ECommerce.Service.Services
             return new GeneralDto.Response
             {
                 Error = false,
-                Message="Address deleted successfully"
+                Message = "Address deleted successfully"
             };
         }
 
@@ -44,7 +45,7 @@ namespace ECommerce.Service.Services
         {
             var address = await _context.Address
                 .AsNoTracking()
-                .Where(w => w.Id==id && w.Status)
+                .Where(w => w.Id == id && w.Status)
                 .Select(s => new UserAddressDto.Detail
                 {
                     Id = s.Id,
@@ -57,7 +58,7 @@ namespace ECommerce.Service.Services
 
             return new GeneralDto.Response
             {
-                Error = address==null?true: false,
+                Error = address == null ? true : false,
                 Data = address
             };
         }
@@ -67,10 +68,10 @@ namespace ECommerce.Service.Services
             var detail = await _context.Address
                 .AsNoTracking()
                 .Where(w => w.UserId == userId && w.Status)
-                .Select(s=>new UserAddressDto.Detail
+                .Select(s => new UserAddressDto.Detail
                 {
                     Id = s.Id,
-                    Country=s.Country,
+                    Country = s.Country,
                     City = s.City,
                     District = s.District,
                     Description = s.Description,
@@ -78,10 +79,21 @@ namespace ECommerce.Service.Services
                 .ToListAsync();
 
             return new GeneralDto.Response
-            { 
-                Error=false,
-                Data=detail
+            {
+                Error = false,
+                Data = detail
             };
+        }
+
+        public async Task<GeneralDto.Response> GetUserAddressSelectOptionsAsync(int userId)
+        {
+            var result = await _context.Address.Where(w => w.UserId == userId).Select(s => new GeneralDto.Select
+            {
+                Label = s.Description,
+                Value = s.Id
+            }).ToListAsync();
+
+            return new GeneralDto.Response { Error = false, Data = result };
         }
 
         public async Task<GeneralDto.Response> SaveAsync(UserAddressDto.SaveRequest model)
@@ -107,7 +119,7 @@ namespace ECommerce.Service.Services
             }
             else
             {
-                 address = await _context.Address.FirstOrDefaultAsync(f => f.Id == model.Id);
+                address = await _context.Address.FirstOrDefaultAsync(f => f.Id == model.Id);
                 if (address is null) return new GeneralDto.Response
                 {
                     Error = true,
@@ -124,7 +136,7 @@ namespace ECommerce.Service.Services
             return new GeneralDto.Response
             {
                 Error = false,
-                Data=address,
+                Data = address,
                 Message = "Address saved successfully"
             };
         }

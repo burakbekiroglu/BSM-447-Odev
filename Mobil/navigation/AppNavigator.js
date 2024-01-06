@@ -14,6 +14,7 @@ import AddressScreen from '../screens/AddressScreen';
 import AddressDetailScreen from '../screens/AddressDetailScreen';
 import FavProductsScreen from '../screens/FavProductsScreen';
 import WishListScreen from '../screens/WishListScreen';
+import PaymentScreen from '../screens/PaymentScreen';
 
 
 const Stack = createStackNavigator();
@@ -66,6 +67,9 @@ const AppNavigator = () => {
       <Stack.Screen 
       name="WishList" 
       component={WishListScreen} />
+       <Stack.Screen 
+      name="Payment" 
+      component={PaymentScreen} />
       <Stack.Screen 
       name="CustomerHome" 
       options={{

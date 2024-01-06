@@ -53,5 +53,13 @@ namespace ECommerce.Service.Controllers
             var result = await _userAddressService.GetAddressByIdAsync(model.Id);
             return Ok(result);
         }
+
+        [HttpGet("GetUserAddressSelectOptions")]
+        public async Task<IActionResult> GetUserAddressSelectOptions()
+        {
+            int userId = HttpContext.User.GetUserIdFromUserClaims();
+            var result = await _userAddressService.GetUserAddressSelectOptionsAsync(userId);
+            return Ok(result);
+        }
     }
 }

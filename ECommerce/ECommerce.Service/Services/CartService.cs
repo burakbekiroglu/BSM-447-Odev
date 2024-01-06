@@ -132,7 +132,7 @@ namespace ECommerce.Service.Services
                     Category=s.FirstOrDefault().Product.Category.Category,
                     Quantity=s.Sum(s2=>s2.Quantity),
                     Total=s.Sum(s2=>s2.Quantity*s2.Amount),
-                    Image=s.FirstOrDefault().Product.ProductImage.FirstOrDefault().FileName                  
+                    Image=s.FirstOrDefault().Product.ProductImage.FirstOrDefault(f=>f.Status).FileName                  
                 }).ToListAsync();
 
             var result = new CartDto.CartDetail
